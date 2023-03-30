@@ -1,5 +1,6 @@
 package learningtest
 
+import com.google.gson.Gson
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -45,6 +46,23 @@ class DataClassTests {
         assertThat(copied3.secondItems).isEmpty()
     }
 
+    @Test
+    fun gsonDeepCopy() {
+        val person = Person(firstName = "Johnny", lastName = "Lim", age = 20, firstItems = listOf(Item("ID card")))
+        person.secondItems.add(Item("coin"))
+
+        val copied = person.gsonDeepCopy()
+
+        assertThat(copied).isNotSameAs(person)
+        assertThat(copied.firstName).isNotSameAs(person.firstName)
+        assertThat(copied.lastName).isNotSameAs(person.lastName)
+        assertThat(copied.age).isSameAs(person.age)
+        assertThat(copied.firstItems).isEqualTo(person.firstItems).isNotSameAs(person.firstItems)
+        assertThat(copied.firstItems[0]).isEqualTo(person.firstItems[0]).isNotSameAs(person.firstItems[0])
+        assertThat(copied.secondItems).isEqualTo(person.secondItems).isNotSameAs(person.secondItems)
+        assertThat(copied.secondItems[0]).isEqualTo(person.secondItems[0]).isNotSameAs(person.secondItems[0])
+    }
+
 }
 
 /**
@@ -59,6 +77,12 @@ data class Person(
     val firstItems: List<Item>,
 ) {
     val secondItems = mutableListOf<Item>()
+
+    fun gsonDeepCopy(): Person = GSON.fromJson(GSON.toJson(this), Person::class.java)
+
+    companion object {
+        private val GSON = Gson()
+    }
 }
 
 /**

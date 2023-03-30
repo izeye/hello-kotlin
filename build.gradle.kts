@@ -16,6 +16,8 @@ dependencies {
     testImplementation(kotlin("test"))
 
     testImplementation("org.assertj:assertj-core:3.24.2")
+
+    testImplementation("com.google.code.gson:gson:2.10.1")
 }
 
 tasks.test {

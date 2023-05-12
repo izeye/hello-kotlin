@@ -31,3 +31,7 @@ tasks.withType<KotlinCompile> {
 application {
     mainClass.set("MainKt")
 }
+
+tasks.wrapper {
+    gradleVersion = "8.1.1"
+}
